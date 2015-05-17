@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+        
+    <context:component-scan base-package="two.ways" />
+ 
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+        <property name="driverClassName" value="org.sqlite.JDBC" />
+        <property name="url" value="jdbc:sqlite:/Users/cliffroot/Documents/2ways.db" />
+       <!--  <property name="username" value="pankaj" />
+        <property name="password" value="pankaj123" />  -->
+    </bean>
+ 
+
+    <bean id="hibernate3AnnotatedSessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>two.ways.model.Project</value>
+                <value>two.ways.model.Comment</value>
+                <value>two.ways.model.User</value>
+                <value>two.ways.model.Achievement</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">two.ways.dao.SqliteDialect</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+    </bean>
+     
+    <bean id="projectDao" class="two.ways.dao.ProjectDao">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
+    </bean>
+    
+    <bean id="userDao" class="two.ways.dao.UserDao">
+        <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
+    </bean>
+</beans>
