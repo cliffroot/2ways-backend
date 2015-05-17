@@ -11,18 +11,26 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
 
 jar {
     baseName = 'gs-rest-service'
     version =  '0.1.0'
 }
 
+
+war {
+	baseName = 'myapp'
+	version =  '0.5.0'
+}
+
+
 repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
@@ -30,6 +38,9 @@ dependencies {
 	compile 'org.hibernate:hibernate-core:4.3.8.Final'
 	compile 'org.xerial:sqlite-jdbc:3.8.9.1'
 	compile 'commons-dbcp:commons-dbcp:1.4'
+	compile 'mysql:mysql-connector-java:5.1.6'
+	
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile("junit:junit")
 }
 

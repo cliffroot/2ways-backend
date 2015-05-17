@@ -18,8 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name="project")
 public class Project{
@@ -32,7 +30,6 @@ public class Project{
 
 	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="owner_id")
-	@JsonManagedReference
 	User owner;
 
 	@Id

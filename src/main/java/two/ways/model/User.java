@@ -9,7 +9,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="user")
@@ -21,9 +21,10 @@ public class User{
 	String photo;
 	String name;
 	String email;
+	String coverPhotoUrl;
 
 	@OneToMany(targetEntity=Project.class, mappedBy="owner", fetch=FetchType.EAGER)
-	@JsonBackReference
+	@JsonIgnore
 	List<Project> projects;
 
 	String bio;
@@ -42,6 +43,15 @@ public class User{
 
 	public void setProjectsSubscribed(List<Project> projectsSubscribed) {
 		this.projectsSubscribed = projectsSubscribed;
+	}
+
+	public String getCoverPhotoUrl() {
+		return coverPhotoUrl;
+	}
+
+
+	public void setCoverPhotoUrl(String coverPhotoUrl) {
+		this.coverPhotoUrl = coverPhotoUrl;
 	}
 
 
