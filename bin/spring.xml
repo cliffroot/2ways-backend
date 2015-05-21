@@ -17,10 +17,10 @@
  
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
-        <property name="driverClassName" value="org.sqlite.JDBC" />
-        <property name="url" value="jdbc:sqlite:/Users/cliffroot/Documents/2ways.db" />
-       <!--  <property name="username" value="pankaj" />
-        <property name="password" value="pankaj123" />  -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://192.168.0.107:3306/ways" />
+        <property name="username" value="user" />
+          <property name="password" value="pass" /> 
     </bean>
  
 
@@ -37,7 +37,7 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">two.ways.dao.SqliteDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
                 <prop key="hibernate.current_session_context_class">thread</prop>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>

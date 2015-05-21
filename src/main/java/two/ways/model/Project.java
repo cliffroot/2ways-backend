@@ -1,5 +1,9 @@
 package two.ways.model;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +21,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
 @Table(name="project")
@@ -24,6 +40,9 @@ public class Project{
 
 	String name;
 
+	@Temporal(value=TemporalType.DATE)
+	@JsonDeserialize(using= DateDeserializer.class)
+	@JsonSerialize(using=DateSerializer.class)
 	Date date;
 
 	String description;
@@ -34,7 +53,7 @@ public class Project{
 
 	@Id
 	@Column(name="id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	Integer id;
 
 	@ElementCollection(fetch=FetchType.EAGER)
@@ -53,21 +72,37 @@ public class Project{
 
 	String place;
 
-	//	public static class LatLng {
-	//		public double latitude;
-	//		public double longitude;
-	//
-	//		public LatLng (Double latitude, Double longitude) {
-	//			this.latitude = latitude;
-	//			this.longitude = longitude;
-	//		}
-	//	}
+	public static class DateDeserializer extends JsonDeserializer<Date> {
+
+		@Override
+		public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			String dateString = jp.getValueAsString();
+			System.out.println("DATE:" + dateString);
+			DateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm:ss");
+			Date date = null;
+			try {
+				date = sdf.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return date;
+		}
+	}
+
+	public static class DateSerializer extends JsonSerializer<Date> {
+
+		@Override
+		public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
+			DateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm:ss");
+			jgen.writeString(sdf.format(value));
+		}
+
+	}
 
 	public Project () {
 		//empty constructor for spring
 	}
 
-	//dummy constructor;
 	public Project (String name, List<String> photos) {
 		this.name = name;
 		this.photos = photos;
