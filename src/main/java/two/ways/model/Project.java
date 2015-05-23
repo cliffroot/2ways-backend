@@ -64,7 +64,7 @@ public class Project{
 
 	String goal; //TODO: not string ok;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinTable(name = "users_subscriptions",  joinColumns = { 
 			@JoinColumn(name = "project_id", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "user_id",  nullable = false, updatable = false) })

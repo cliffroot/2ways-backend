@@ -2,6 +2,7 @@ package two.ways.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User{
 
 	@Id
+	@Column(name = "socialId")
 	String socialId;
 
 	String photo;
@@ -33,6 +35,7 @@ public class User{
 	List<Achievement> achievements;
 
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usersSubscribed")
+	@JsonIgnore
 	List<Project> projectsSubscribed;
 
 

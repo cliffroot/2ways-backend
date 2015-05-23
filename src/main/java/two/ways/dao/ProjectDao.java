@@ -25,6 +25,15 @@ public class ProjectDao {
 		Transaction tx = session.beginTransaction();
 		session.persist(p);
 		tx.commit();
+		session.flush();
+		session.close();
+	}
+
+	public void update(Project p) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.update(p);
+		tx.commit();
 		session.close();
 	}
 
@@ -34,6 +43,13 @@ public class ProjectDao {
 		List<Project> project = session.createQuery("from Project").list();
 		session.close();
 
+		return project;
+	}
+
+	public Project getProjectById(String id) {
+		Session session = sessionFactory.openSession();
+		Project project = (Project) session.createQuery("from Project as P where P.id = " + id).uniqueResult();
+		session.close();
 
 		return project;
 	}

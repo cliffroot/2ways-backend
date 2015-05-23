@@ -42,4 +42,12 @@ public class UserDao {
 		return projects;
 	}
 
+	public User getUserById(String id) {
+		Session session = sessionFactory.openSession();
+		User user = (User) session.createQuery("from User as U where U.socialId = '" + id + "'").uniqueResult();
+		session.close();
+
+		return user;
+	}
+
 }
