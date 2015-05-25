@@ -2,11 +2,16 @@ package two.ways.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +28,8 @@ import two.ways.model.User;
 
 @RestController
 public class ProjectController {
+
+	private static final String IMAGE_DIR = "image_dir/";
 
 	@Autowired
 	ProjectDao projectDao;
@@ -72,9 +79,18 @@ public class ProjectController {
 		if (!file.isEmpty()) {
 			try {
 				byte[] bytes = file.getBytes();
-				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(name)));
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(IMAGE_DIR + name)));
 				stream.write(bytes);
 				stream.close();
+
+				Project project = projectDao.getProjectById(projectId);
+				if (project.getPhotos() == null) {
+					project.setPhotos(new LinkedList<String>());
+				}
+
+				project.getPhotos().add("http://192.168.0.106:8080/projects/photo/" + name);
+				projectDao.update(project);
+
 				return "You successfully uploaded " + name + "!";
 			} catch (Exception e) {
 				return "You failed to upload " + name + " => " + e.getMessage();
@@ -82,6 +98,17 @@ public class ProjectController {
 		} else {
 			return "You failed to upload " + name + " because the file was empty.";
 		}
+	}
+
+	@RequestMapping(value = "/projects/photo/{photoName}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<InputStreamResource> downloadUserAvatarImage(@PathVariable String photoName) throws FileNotFoundException {
+		System.out.println(new File(IMAGE_DIR).listFiles());
+		File file = new File(IMAGE_DIR + photoName);
+
+		return ResponseEntity.ok()
+				.contentLength(file.length()).contentType(MediaType.IMAGE_PNG)
+				.body(new InputStreamResource(new FileInputStream(file)));
 	}
 
 }
