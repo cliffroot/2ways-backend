@@ -59,7 +59,7 @@ public class Project{
 	@ElementCollection(fetch=FetchType.EAGER)
 	List<String> photos;
 
-	@OneToMany(targetEntity=Comment.class, mappedBy="project", fetch=FetchType.EAGER)
+	@OneToMany(targetEntity=Comment.class, mappedBy="project", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	List<Comment> comments;
 
 	String goal; //TODO: not string ok;

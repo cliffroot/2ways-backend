@@ -12,6 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 @Entity
 @Table(name = "comment")
 public class Comment {
@@ -22,10 +26,13 @@ public class Comment {
 	@JoinColumn(name="person_id")
 	User person;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="project_id")
+	@JsonIgnore
 	Project project;
 
+	@JsonDeserialize(using=Project.DateDeserializer.class)
+	@JsonSerialize(using=Project.DateSerializer.class)
 	Date date;
 
 	@Id

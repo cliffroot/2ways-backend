@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import two.ways.dao.ProjectDao;
 import two.ways.dao.UserDao;
+import two.ways.model.Comment;
 import two.ways.model.Project;
 import two.ways.model.User;
 
@@ -109,6 +110,25 @@ public class ProjectController {
 		return ResponseEntity.ok()
 				.contentLength(file.length()).contentType(MediaType.IMAGE_PNG)
 				.body(new InputStreamResource(new FileInputStream(file)));
+	}
+
+	@RequestMapping(value = "/projects/{projectId}/comments/", method = RequestMethod.GET) 
+	public List<Comment> listComments (@PathVariable String projectId) {
+		return projectDao.getProjectById(projectId).getComments();
+	}
+
+	@RequestMapping(value = "/projects/{projectId}/comments", method = RequestMethod.POST) 
+	public void addComment (@RequestBody Comment comment, @PathVariable String projectId) {
+		Project project = projectDao.getProjectById(projectId);
+		System.out.println("Comments:" + project.getComments());
+		if (project.getComments() == null) {
+			project.setComments(new LinkedList<Comment> ());
+		}
+		comment.setProject(project);
+		project.getComments().add(comment);
+		System.out.println("Comments:" + project.getComments());
+
+		projectDao.update(project);
 	}
 
 }
