@@ -23,7 +23,7 @@ public class ProjectDao {
 	public void save(Project p) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		session.persist(p);
+		session.save(p);
 		tx.commit();
 		session.flush();
 		session.close();
@@ -34,6 +34,7 @@ public class ProjectDao {
 		Transaction tx = session.beginTransaction();
 		session.update(p);
 		tx.commit();
+		session.flush();
 		session.close();
 	}
 
@@ -41,6 +42,7 @@ public class ProjectDao {
 	public List<Project> list() {
 		Session session = sessionFactory.openSession();
 		List<Project> project = session.createQuery("from Project").list();
+		session.flush();
 		session.close();
 
 		return project;
@@ -49,6 +51,7 @@ public class ProjectDao {
 	public Project getProjectById(String id) {
 		Session session = sessionFactory.openSession();
 		Project project = (Project) session.createQuery("from Project as P where P.id = " + id).uniqueResult();
+		session.flush();
 		session.close();
 
 		return project;

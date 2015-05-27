@@ -25,6 +25,14 @@ public class UserDao {
 		session.close();
 	}
 
+	public void update(User u) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		session.update(u);
+		tx.commit();
+		session.close();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<User> list() {
 		Session session = sessionFactory.openSession();

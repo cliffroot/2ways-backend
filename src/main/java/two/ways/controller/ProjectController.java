@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -26,6 +27,7 @@ import two.ways.dao.UserDao;
 import two.ways.model.Comment;
 import two.ways.model.Project;
 import two.ways.model.User;
+import two.ways.service.App;
 
 @RestController
 public class ProjectController {
@@ -45,7 +47,7 @@ public class ProjectController {
 
 	@RequestMapping(value = "/projects", method = RequestMethod.POST)
 	public Integer createProject (@RequestBody Project project) {
-		project.setUsersSubscribed(new LinkedList<User>());
+		project.setUsersSubscribed(new HashSet<User>());
 		project.getUsersSubscribed().add(project.getOwner());
 		projectDao.save(project);
 		return project.getId();
@@ -57,7 +59,7 @@ public class ProjectController {
 		Project project = projectDao.getProjectById(projectId);
 		User user = userDao.getUserById(userId);
 
-		List<User> subscribedUsers = project.getUsersSubscribed();
+		Set<User> subscribedUsers = project.getUsersSubscribed();
 
 		if (subscribedUsers == null) {
 			throw new IllegalStateException ("bullshit");
@@ -68,9 +70,8 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/projects/{projectId}/subscribedUsers")
-	public List<User> getSubscribedUsers (@PathVariable String projectId) {
+	public Set<User> getSubscribedUsers (@PathVariable String projectId) {
 		Project project = projectDao.getProjectById(projectId);
-
 		return project.getUsersSubscribed();
 
 	}
@@ -86,7 +87,7 @@ public class ProjectController {
 
 				Project project = projectDao.getProjectById(projectId);
 				if (project.getPhotos() == null) {
-					project.setPhotos(new LinkedList<String>());
+					project.setPhotos(new HashSet<String>());
 				}
 
 				project.getPhotos().add("http://192.168.0.106:8080/projects/photo/" + name);
@@ -113,7 +114,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/projects/{projectId}/comments/", method = RequestMethod.GET) 
-	public List<Comment> listComments (@PathVariable String projectId) {
+	public Set<Comment> listComments (@PathVariable String projectId) {
 		return projectDao.getProjectById(projectId).getComments();
 	}
 
@@ -122,13 +123,22 @@ public class ProjectController {
 		Project project = projectDao.getProjectById(projectId);
 		System.out.println("Comments:" + project.getComments());
 		if (project.getComments() == null) {
-			project.setComments(new LinkedList<Comment> ());
+			project.setComments(new HashSet<Comment> ());
 		}
 		comment.setProject(project);
 		project.getComments().add(comment);
 		System.out.println("Comments:" + project.getComments());
 
 		projectDao.update(project);
+
+		App.send(comment.getBody(), comment.getPerson().getName() + " додав коментар!", project.getOwner().getDeviceRegistrationId());
+	}
+
+	@RequestMapping(value = "/users/{userId}/addRegistrationId/{registration}", method = RequestMethod.GET)
+	public void setRegistrationId (@PathVariable String userId, @PathVariable String registration) {
+		User user = userDao.getUserById(userId);
+		user.setDeviceRegistrationId(registration);
+		userDao.update(user);
 	}
 
 }

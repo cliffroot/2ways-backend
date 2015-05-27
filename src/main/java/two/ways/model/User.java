@@ -24,6 +24,7 @@ public class User{
 	String name;
 	String email;
 	String coverPhotoUrl;
+	String deviceRegistrationId;
 
 	@OneToMany(targetEntity=Project.class, mappedBy="owner", fetch=FetchType.EAGER)
 	@JsonIgnore
@@ -37,6 +38,15 @@ public class User{
 	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "usersSubscribed")
 	@JsonIgnore
 	List<Project> projectsSubscribed;
+
+	public String getDeviceRegistrationId() {
+		return deviceRegistrationId;
+	}
+
+
+	public void setDeviceRegistrationId(String deviceRegistrationId) {
+		this.deviceRegistrationId = deviceRegistrationId;
+	}
 
 
 	public List<Project> getProjectsSubscribed() {

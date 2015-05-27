@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,10 +57,10 @@ public class Project{
 	Integer id;
 
 	@ElementCollection(fetch=FetchType.EAGER)
-	List<String> photos;
+	Set<String> photos;
 
 	@OneToMany(targetEntity=Comment.class, mappedBy="project", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-	List<Comment> comments;
+	Set<Comment> comments;
 
 	String goal; //TODO: not string ok;
 
@@ -68,7 +68,7 @@ public class Project{
 	@JoinTable(name = "users_subscriptions",  joinColumns = { 
 			@JoinColumn(name = "project_id", nullable = false, updatable = false) }, 
 			inverseJoinColumns = { @JoinColumn(name = "user_id",  nullable = false, updatable = false) })
-	List<User> usersSubscribed;
+	Set<User> usersSubscribed;
 
 	String place;
 
@@ -103,7 +103,7 @@ public class Project{
 		//empty constructor for spring
 	}
 
-	public Project (String name, List<String> photos) {
+	public Project (String name, Set<String> photos) {
 		this.name = name;
 		this.photos = photos;
 	}
@@ -121,7 +121,7 @@ public class Project{
 
 	//TODO: fuck me if we're not supposed to use builder pattern here
 	public Project(String name, Date date, String description, 
-			User owner, List<String> photos, List<Comment> comments, String goal, List<User> usersSubscribed, String place) {
+			User owner, Set<String> photos, Set<Comment> comments, String goal, Set<User> usersSubscribed, String place) {
 		this.name = name;
 		this.date = date;
 		this.description = description;
@@ -175,19 +175,19 @@ public class Project{
 		this.id = id;
 	}
 
-	public List<String> getPhotos() {
+	public Set<String> getPhotos() {
 		return photos;
 	}
 
-	public void setPhotos(List<String> photos) {
+	public void setPhotos(Set<String> photos) {
 		this.photos = photos;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -199,11 +199,11 @@ public class Project{
 		this.goal = goal;
 	}
 
-	public List<User> getUsersSubscribed() {
+	public Set<User> getUsersSubscribed() {
 		return usersSubscribed;
 	}
 
-	public void setUsersSubscribed(List<User> usersSubscribed) {
+	public void setUsersSubscribed(Set<User> usersSubscribed) {
 		this.usersSubscribed = usersSubscribed;
 	}
 
