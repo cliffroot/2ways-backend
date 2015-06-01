@@ -40,7 +40,7 @@ public class Project{
 
 	String name;
 
-	@Temporal(value=TemporalType.DATE)
+	@Temporal(value=TemporalType.TIMESTAMP)
 	@JsonDeserialize(using= DateDeserializer.class)
 	@JsonSerialize(using=DateSerializer.class)
 	Date date;
@@ -77,7 +77,6 @@ public class Project{
 		@Override
 		public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 			String dateString = jp.getValueAsString();
-			System.out.println("DATE:" + dateString);
 			DateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy HH:mm:ss");
 			Date date = null;
 			try {
@@ -85,6 +84,7 @@ public class Project{
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
+			System.out.println("DATE:" + date);
 			return date;
 		}
 	}

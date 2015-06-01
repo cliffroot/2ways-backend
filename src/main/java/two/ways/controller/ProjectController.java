@@ -90,7 +90,7 @@ public class ProjectController {
 					project.setPhotos(new HashSet<String>());
 				}
 
-				project.getPhotos().add("http://192.168.0.106:8080/projects/photo/" + name);
+				project.getPhotos().add("ec2-52-24-193-13.us-west-2.compute.amazonaws.com:8080/projects/photo/" + name);
 				projectDao.update(project);
 
 				return "You successfully uploaded " + name + "!";
@@ -109,7 +109,7 @@ public class ProjectController {
 		File file = new File(IMAGE_DIR + photoName);
 
 		return ResponseEntity.ok()
-				.contentLength(file.length()).contentType(MediaType.IMAGE_PNG)
+				.contentLength(file.length()).contentType(MediaType.IMAGE_JPEG)
 				.body(new InputStreamResource(new FileInputStream(file)));
 	}
 

@@ -24,7 +24,7 @@ public class UserController {
 		return userDao.list();
 	}
 
-	@RequestMapping("/users/{socialId}/projects/")
+	@RequestMapping(value = "/users/{socialId}/projects", method = RequestMethod.GET)
 	public List<Project> userProjects (@PathVariable String socialId) {
 		return userDao.getProjectByUsedId(socialId);
 	}
