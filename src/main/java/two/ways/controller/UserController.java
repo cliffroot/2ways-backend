@@ -29,6 +29,11 @@ public class UserController {
 		return userDao.getProjectByUsedId(socialId);
 	}
 
+	@RequestMapping(value = "/users/{socialId}", method = RequestMethod.GET) 
+	public User getUserById (@PathVariable String socialId) {
+		return userDao.getUserById(socialId);
+	}
+
 	@RequestMapping(value = "/users/", method = RequestMethod.POST)
 	public void createUser (@RequestBody User user) {
 		userDao.save(user);
