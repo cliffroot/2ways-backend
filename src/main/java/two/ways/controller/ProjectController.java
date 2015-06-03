@@ -90,7 +90,7 @@ public class ProjectController {
 					project.setPhotos(new HashSet<String>());
 				}
 
-				project.getPhotos().add("ec2-52-24-193-13.us-west-2.compute.amazonaws.com:8080/projects/photo/" + name);
+				project.getPhotos().add("http://ec2-52-24-193-13.us-west-2.compute.amazonaws.com:8080/projects/photo/" + name);
 				projectDao.update(project);
 
 				return "You successfully uploaded " + name + "!";
