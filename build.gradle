@@ -39,6 +39,9 @@ dependencies {
 	compile 'org.xerial:sqlite-jdbc:3.8.9.1'
 	compile 'commons-dbcp:commons-dbcp:1.4'
 	compile 'mysql:mysql-connector-java:5.1.6'
+	compile 'javax.mail:mail:1.4.1'
+	compile 'org.springframework:spring-context-support:3.2.0.RELEASE'
+	
 	
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile("junit:junit")

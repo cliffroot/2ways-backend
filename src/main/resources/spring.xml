@@ -52,4 +52,22 @@
     <bean id="userDao" class="two.ways.dao.UserDao">
         <property name="sessionFactory" ref="hibernate3AnnotatedSessionFactory" />
     </bean>
+    
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="25" />
+		<property name="username" value="paradise.octopus" />
+		<property name="password" value="boobookah" />
+	 
+		<property name="javaMailProperties">
+		   <props>
+	       	      <prop key="mail.smtp.auth">true</prop>
+	       	      <prop key="mail.smtp.starttls.enable">true</prop>
+	       	   </props>
+		</property>
+	</bean>
+	 
+	<bean id="mailMail" class="two.ways.service.MailMail">
+		<property name="mailSender" ref="mailSender" />
+	</bean>
 </beans>
