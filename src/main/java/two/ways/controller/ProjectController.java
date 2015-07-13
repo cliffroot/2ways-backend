@@ -84,7 +84,9 @@ public class ProjectController {
 		}
 
 		project.getUsersSubscribed().remove(user);
+		user.getProjectsSubscribed().remove(project);
 		projectDao.update(project);
+		userDao.update(user);
 	}
 
 	@RequestMapping(value = "/projects/{projectId}/subscribedUsers")
