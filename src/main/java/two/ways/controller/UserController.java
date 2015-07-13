@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import two.ways.dao.UserDao;
@@ -60,6 +61,13 @@ public class UserController {
 	@RequestMapping(value = "/users/", method = RequestMethod.POST)
 	public void createUser (@RequestBody User user) {
 		userDao.save(user);
+	}
+
+	@RequestMapping(value = "/users/{socialId}/addEmail", method = RequestMethod.POST) 
+	public void addEmail (@PathVariable String socialId, @RequestParam(value="email") String email) {
+		User user = userDao.getUserById(socialId);
+		user.setEmail(email);
+		userDao.update(user);
 	}
 
 }

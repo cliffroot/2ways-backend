@@ -69,6 +69,24 @@ public class ProjectController {
 		projectDao.update(project);
 	}
 
+	@RequestMapping(value = "/projects/{projectId}/unsubscribe/{userId}", method = RequestMethod.POST)
+	public void unsubscribeUser (@PathVariable String projectId, @PathVariable String userId) {
+		Project project = projectDao.getProjectById(projectId);
+		User user = userDao.getUserById(userId);
+
+		Set<User> subscribedUsers = project.getUsersSubscribed();
+
+		if (subscribedUsers == null) {
+			throw new IllegalStateException ("bullshit");
+		}
+		if (!subscribedUsers.contains(user)) {
+			throw new IllegalStateException ("no such user");
+		}
+
+		project.getUsersSubscribed().remove(user);
+		projectDao.update(project);
+	}
+
 	@RequestMapping(value = "/projects/{projectId}/subscribedUsers")
 	public Set<User> getSubscribedUsers (@PathVariable String projectId) {
 		Project project = projectDao.getProjectById(projectId);
